@@ -106,26 +106,29 @@ public final class MongoDB implements DB {
             return;
         }
         final int limit = 50;
-        collection.find().sort(Sorts.descending()).limit(limit).subscribe(new Subscriber<>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                s.request(limit);
-            }
+        collection.find()
+                .sort(Sorts.descending("_id"))
+                .limit(limit)
+                .subscribe(new Subscriber<>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(limit);
+                    }
 
-            @Override
-            public void onNext(Image image) {
-                imageConsumer.accept(image);
-            }
+                    @Override
+                    public void onNext(Image image) {
+                        imageConsumer.accept(image);
+                    }
 
-            @Override
-            public void onError(Throwable t) {
-                log.log(Level.WARNING, "Could not get images from the database", t);
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        log.log(Level.WARNING, "Could not get images from the database", t);
+                    }
 
-            @Override
-            public void onComplete() {
-                log.log(Level.INFO, "Successfully returned images from the Database");
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        log.log(Level.INFO, "Successfully returned images from the Database");
+                    }
+                });
     }
 }
