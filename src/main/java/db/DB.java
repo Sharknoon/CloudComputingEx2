@@ -1,15 +1,15 @@
 package db;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public interface DB {
 
-    default DB getInstance(){
-        return null;
+    default DB getInstance() {
+        return new DBImpl();
     }
 
     void storeImage(Image image);
 
-    List<Image> loadImages();
+    void loadImages(Consumer<Image> imageConsumer);
 
 }
