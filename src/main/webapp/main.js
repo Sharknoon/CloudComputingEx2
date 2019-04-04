@@ -17,7 +17,6 @@ function uploadNewImage() {
     }
 
     getBase64(filelist[0]).then(function (data) {
-        console.log(data);
         const imageCaption = document.getElementById("caption").value;
         const imageDesc = document.getElementById("description").value;
 
@@ -37,7 +36,7 @@ function uploadNewImage() {
 
         fetch('saveNewImage', requestBody)
             .then(function (response) {
-                return response.json();
+              location.reload();
             })
             .then(function (myJson) {
                 console.log(JSON.stringify(myJson));
@@ -63,5 +62,13 @@ function handleDropEvent(event) {
         filelist.push(event.dataTransfer.files[i]);  // Hinzufügen der Datei zur Uploadqueue
         totalSize += event.dataTransfer.files[i].size;  // Hinzufügen der Dateigröße zur Gesamtgröße
     }
+
+    getBase64(filelist[0]).then(function (data) {
+        let img = new Image();
+        img.src = data;
+        img.classList.add("toUploadImage");
+        document.getElementById("dragzone").textContent = "";
+        document.getElementById("dragzone").appendChild(img);
+    });
 }
 

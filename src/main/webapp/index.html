@@ -9,15 +9,13 @@
 <body onload="main()">
 <div id="uploadContainer">
     <h1>Upload new Image</h1>
-    <div id="dragzone"></div>
+    <div id="dragzone">Please insert new image by drag'n'drop</div>
     <span class="spanCaption">Caption</span>
     <input id="caption">
     <span class="spanDesc">Description</span>
     <input id="description">
     <br>
-    <button onclick="uploadNewImage();">Upload</button>
-    <span id="progress">Aktueller Fortschritt: 0%</span>
-
+    <button id="uploadButton" onclick="uploadNewImage();">Upload</button>
 </div>
 
 

@@ -11,4 +11,18 @@ public class SaveNewImageMessage {
         this.imageDesc = imageDesc;
         this.imageData = imageData;
     }
+
+    public String getImageCaption() {
+        return imageCaption;
+    }
+
+    public String getImageDesc() {
+        return imageDesc;
+    }
+
+    public String getImageData() {
+        return imageData;
+    }
+
+
 }
