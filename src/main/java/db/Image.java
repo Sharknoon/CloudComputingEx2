@@ -4,15 +4,17 @@ import org.bson.types.ObjectId;
 
 import java.util.Objects;
 
+/**
+ * Just a simple bean holding a Image
+ */
 public class Image {
 
-    private final ObjectId id;
+    private final ObjectId id = new ObjectId();
     private final String base64;
     private final String caption;
     private final String description;
 
-    public Image(ObjectId id, String base64, String caption, String description) {
-        this.id = id;
+    public Image(String base64, String caption, String description) {
         this.base64 = base64;
         this.caption = caption;
         this.description = description;
@@ -47,7 +49,7 @@ public class Image {
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : -1;
+        return id.hashCode();
     }
 
     @Override
