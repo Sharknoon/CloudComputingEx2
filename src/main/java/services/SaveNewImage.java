@@ -21,8 +21,10 @@ public class SaveNewImage extends HttpServlet {
         Gson gson = new Gson();
 
         SaveNewImageMessage newImageMessage = gson.fromJson(reader, SaveNewImageMessage.class);
-        Image toStoreImage = new Image(newImageMessage.getImageData(),
-                newImageMessage.getImageCaption(), newImageMessage.getImageDesc());
+        Image toStoreImage = new Image();
+        toStoreImage.description = newImageMessage.getImageDesc();
+        toStoreImage.caption = newImageMessage.getImageCaption();
+        toStoreImage.base64 = newImageMessage.getImageData();
 
         DB db = DBs.getMongoDB();
         db.storeImage(toStoreImage);

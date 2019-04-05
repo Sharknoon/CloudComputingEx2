@@ -2,18 +2,21 @@ package db;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
-import com.mongodb.reactivestreams.client.*;
-import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public final class MongoDB implements DB {
 
@@ -43,12 +46,10 @@ public final class MongoDB implements DB {
                                     )
                             )
                             .codecRegistry(
-                                    CodecRegistries.fromRegistries(
-                                            MongoClients.getDefaultCodecRegistry(),
-                                            CodecRegistries.fromProviders(
-                                                    PojoCodecProvider.builder()
-                                                            .automatic(true)
-                                                            .build()
+                                    fromRegistries(
+                                            MongoClientSettings.getDefaultCodecRegistry(),
+                                            fromProviders(
+                                                    PojoCodecProvider.builder().automatic(true).build()
                                             )
                                     )
                             )
@@ -78,27 +79,8 @@ public final class MongoDB implements DB {
         if (!initialized) {
             return;
         }
-        collection.insertOne(image).subscribe(new Subscriber<>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                s.request(1);// <--- Data requested and the insertion will now occur
-            }
-
-            @Override
-            public void onNext(Success success) {
-                log.log(Level.INFO, "Storing image in Database " + image);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                log.log(Level.WARNING, "Could not store image in database", t);
-            }
-
-            @Override
-            public void onComplete() {
-                log.log(Level.INFO, "Successfully stored image in Database " + image);
-            }
-        });
+        collection.insertOne(image);
+        log.log(Level.INFO, "Successfully stored image in Database " + image);
 
     }
 
@@ -112,27 +94,8 @@ public final class MongoDB implements DB {
         collection.find()
                 .sort(Sorts.descending("_id"))
                 .limit(limit)
-                .subscribe(new Subscriber<>() {
-                    @Override
-                    public void onSubscribe(Subscription s) {
-                        s.request(limit);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        list.add(image);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        log.log(Level.WARNING, "Could not get images from the database", t);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        imageConsumer.accept(list);
-                        log.log(Level.INFO, "Successfully returned images from the Database");
-                    }
-                });
+                .into(list);
+        log.log(Level.INFO, "Successfully returned images from the Database");
+        imageConsumer.accept(list);
     }
 }

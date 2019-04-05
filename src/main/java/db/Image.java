@@ -9,32 +9,10 @@ import java.util.Objects;
  */
 public class Image {
 
-    private final ObjectId id = new ObjectId();
-    private final String base64;
-    private final String caption;
-    private final String description;
-
-    public Image(String base64, String caption, String description) {
-        this.base64 = base64;
-        this.caption = caption;
-        this.description = description;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public String getBase64() {
-        return base64;
-    }
-
-    public String getCaption() {
-        return caption;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    public ObjectId id = new ObjectId();
+    public String base64 = "";
+    public String caption = "";
+    public String description = "";
 
     @Override
     public boolean equals(Object o) {

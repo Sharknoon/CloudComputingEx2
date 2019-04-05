@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-reactivestreams</artifactId>
+            <artifactId>mongodb-driver-sync</artifactId>
             <version>RELEASE</version>
         </dependency>
     </dependencies>
