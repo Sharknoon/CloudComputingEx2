@@ -1,5 +1,6 @@
 package db;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -19,6 +20,6 @@ public interface DB {
      *
      * @param imageConsumer The consumer of the asynchronously supplied images
      */
-    void loadImages(Consumer<Image> imageConsumer);
+    void loadImages(Consumer<List<Image>> imageConsumer);
 
 }

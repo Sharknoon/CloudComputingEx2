@@ -9,6 +9,8 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,11 +103,12 @@ public final class MongoDB implements DB {
     }
 
     @Override
-    public void loadImages(Consumer<Image> imageConsumer) {
+    public void loadImages(Consumer<List<Image>> imageConsumer) {
         if (!initialized) {
             return;
         }
         final int limit = 50;
+        var list = new ArrayList<Image>();
         collection.find()
                 .sort(Sorts.descending("_id"))
                 .limit(limit)
@@ -117,7 +120,7 @@ public final class MongoDB implements DB {
 
                     @Override
                     public void onNext(Image image) {
-                        imageConsumer.accept(image);
+                        list.add(image);
                     }
 
                     @Override
@@ -127,6 +130,7 @@ public final class MongoDB implements DB {
 
                     @Override
                     public void onComplete() {
+                        imageConsumer.accept(list);
                         log.log(Level.INFO, "Successfully returned images from the Database");
                     }
                 });
