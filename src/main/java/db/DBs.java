@@ -1,9 +1,14 @@
 package db;
 
-public class DBs {
+public final class DBs {
 
-    public static DB getInstance() {
-        return new DBImpl();
+    /**
+     * Returns a instance to the Mongo DB
+     *
+     * @return A Instance pointing to a MongoDB
+     */
+    public static DB getMongoDB() {
+        return new MongoDB();
     }
 
 }

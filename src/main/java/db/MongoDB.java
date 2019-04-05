@@ -2,34 +2,34 @@ package db;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.reactivestreams.client.*;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DBImpl implements DB {
+public final class MongoDB implements DB {
 
-    private static final Logger log = Logger.getLogger(DBImpl.class.getName());
-    private static final Executor threadPool = Executors.newCachedThreadPool();
+    private static final Logger log = Logger.getLogger(MongoDB.class.getName());
 
     private static final String username = "simon";
     private static final String password = "Master2020";
     private static final String database = "cc";
     private static final String collectionName = "images";
-    private final MongoCollection<Image> collection;
-    private boolean initialized = false;
 
-    public DBImpl() {
+    private static final MongoCollection<Image> collection;
+    private static final boolean initialized;
+
+    static {
         MongoClient mongoClient;
         MongoDatabase mongoDatabase;
-        MongoCollection<Image> collection = null;
+        MongoCollection<Image> mongoCollection = null;
+        boolean mongoInitialized = false;
         try {
             mongoClient = MongoClients.create(
                     MongoClientSettings.builder()
@@ -53,39 +53,51 @@ public class DBImpl implements DB {
                             .build()
             );
             mongoDatabase = mongoClient.getDatabase(database);
-            collection = mongoDatabase.getCollection(collectionName, Image.class);
-            initialized = true;
+            mongoCollection = mongoDatabase.getCollection(collectionName, Image.class);
+            //To definitely get no Nullpointer
+            if (mongoCollection != null) {
+                mongoInitialized = true;
+            }
         } catch (Exception e) {
             log.log(Level.SEVERE, "Could not connect to Database", e);
         }
-        this.collection = collection;
+        collection = mongoCollection;
+        initialized = mongoInitialized;
+    }
+
+    /**
+     * Dont allow others to create Instances of this class
+     */
+    MongoDB() {
     }
 
     @Override
     public void storeImage(Image image) {
-        if (initialized) {
-            collection.insertOne(image).subscribe(new Subscriber<>() {
-                @Override
-                public void onSubscribe(Subscription s) {
-                    s.request(1);// <--- Data requested and the insertion will now occur
-                }
-
-                @Override
-                public void onNext(Success success) {
-                    log.log(Level.INFO, "Storing image in Database " + image);
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    log.log(Level.WARNING, "Could not store image in database", t);
-                }
-
-                @Override
-                public void onComplete() {
-                    log.log(Level.INFO, "Successfully stored image in Database " + image);
-                }
-            });
+        if (!initialized) {
+            return;
         }
+        collection.insertOne(image).subscribe(new Subscriber<>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                s.request(1);// <--- Data requested and the insertion will now occur
+            }
+
+            @Override
+            public void onNext(Success success) {
+                log.log(Level.INFO, "Storing image in Database " + image);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                log.log(Level.WARNING, "Could not store image in database", t);
+            }
+
+            @Override
+            public void onComplete() {
+                log.log(Level.INFO, "Successfully stored image in Database " + image);
+            }
+        });
+
     }
 
     @Override
@@ -93,26 +105,30 @@ public class DBImpl implements DB {
         if (!initialized) {
             return;
         }
-        collection.find().limit(50).subscribe(new Subscriber<>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                s.request(Long.MAX_VALUE);
-            }
+        final int limit = 50;
+        collection.find()
+                .sort(Sorts.descending("_id"))
+                .limit(limit)
+                .subscribe(new Subscriber<>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        s.request(limit);
+                    }
 
-            @Override
-            public void onNext(Image image) {
-                imageConsumer.accept(image);
-            }
+                    @Override
+                    public void onNext(Image image) {
+                        imageConsumer.accept(image);
+                    }
 
-            @Override
-            public void onError(Throwable t) {
-                log.log(Level.WARNING, "Could not get images from the database", t);
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        log.log(Level.WARNING, "Could not get images from the database", t);
+                    }
 
-            @Override
-            public void onComplete() {
-                log.log(Level.INFO, "Successfully returned images from the Database");
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        log.log(Level.INFO, "Successfully returned images from the Database");
+                    }
+                });
     }
 }
