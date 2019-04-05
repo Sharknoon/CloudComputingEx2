@@ -30,7 +30,5 @@ public class SaveNewImage extends HttpServlet {
         db.storeImage(toStoreImage);
 
         resp.setStatus(HttpServletResponse.SC_OK);
-
-
     }
 }

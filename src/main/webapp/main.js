@@ -8,6 +8,55 @@ function main() {
     dragzone.addEventListener('dragover', function (ev) {
         ev.preventDefault();
     }, false);
+
+    loadSaveImages()
+}
+
+function loadSaveImages() {
+
+ /**   fetch('getSavedImages')
+        .then(async function (response) {
+            const responseJson = await response.json();
+           showSavedImages(responseJson.images);
+        })
+        .then(function (myJson) {
+            console.log(JSON.stringify(myJson));
+        }); */
+
+ showSavedImages([]);
+}
+
+function showSavedImages(images) {
+
+    const overviewContainer = document.getElementById("overviewContainer");
+
+    var test = {
+        "caption": "caption",
+        "description" : "Das ist eine Beschreibung"
+    };
+
+    for(let i=0; i < 10; i++){
+        images.push(test);
+    }
+
+    for(let i=0; i < images.length; i++){
+
+        const imageContainer = document.createElement("div");
+        imageContainer.classList.add("imageContainer");
+        overviewContainer.appendChild(imageContainer);
+
+        const imageCaption = document.createElement("h2");
+        imageCaption.textContent = images[i].caption;
+        imageContainer.appendChild(imageCaption);
+
+        const imageTag = new Image();
+        imageTag.src = "Download.jpg" //images[i].base64;
+        imageContainer.appendChild(imageTag);
+
+        const imageDesc = document.createElement("span");
+        imageDesc.textContent = images[i].description;
+        imageContainer.appendChild(imageDesc);
+    }
 }
 
 function uploadNewImage() {

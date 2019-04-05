@@ -44,3 +44,22 @@ body {
     max-height: 3em;
     display: inline-block;
 }
+
+#overviewContainer {
+    width: calc(100% - 2em);
+    padding: 1em;
+    overflow: auto;
+}
+
+.imageContainer {
+    border-bottom: 1px solid orange;
+}
+
+.imageContainer img {
+    display: inline-block;
+    max-height: 15em;
+}
+
+.imageContainer span {
+    display: block;
+}
