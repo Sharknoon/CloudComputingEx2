@@ -32,7 +32,7 @@ public class GetSavedImages extends HttpServlet {
                 out.print(imagesMessageJson);
                 out.flush();
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
