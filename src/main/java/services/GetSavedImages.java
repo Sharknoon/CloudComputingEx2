@@ -34,6 +34,7 @@ public class GetSavedImages extends HttpServlet {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         });
     }
