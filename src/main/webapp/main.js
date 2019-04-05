@@ -14,14 +14,14 @@ function main() {
 
 function loadSaveImages() {
 
- /**   fetch('getSavedImages')
+    fetch('getSavedImages')
         .then(async function (response) {
             const responseJson = await response.json();
            showSavedImages(responseJson.images);
         })
         .then(function (myJson) {
             console.log(JSON.stringify(myJson));
-        }); */
+        });
 
  showSavedImages([]);
 }
@@ -30,14 +30,14 @@ function showSavedImages(images) {
 
     const overviewContainer = document.getElementById("overviewContainer");
 
-    var test = {
+ /**   var test = {
         "caption": "caption",
         "description" : "Das ist eine Beschreibung"
     };
 
     for(let i=0; i < 10; i++){
         images.push(test);
-    }
+    } */
 
     for(let i=0; i < images.length; i++){
 
@@ -50,7 +50,7 @@ function showSavedImages(images) {
         imageContainer.appendChild(imageCaption);
 
         const imageTag = new Image();
-        imageTag.src = "Download.jpg" //images[i].base64;
+        imageTag.src = images[i].base64;
         imageContainer.appendChild(imageTag);
 
         const imageDesc = document.createElement("span");
