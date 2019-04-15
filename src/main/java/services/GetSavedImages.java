@@ -18,12 +18,12 @@ public class GetSavedImages extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        DB db = DBs.getMongoDB();
+        DB db = DBs.getDB(DBs.DBInstance.GOOGLE_CLOUD_PLATFORM);
         db.loadImages(images -> {
 
             try {
                 Gson gson = new Gson();
-                GetSaveImagesMessage imageMessage = new GetSaveImagesMessage(images);
+                GetSavedImagesMessage imageMessage = new GetSavedImagesMessage(images);
                 String imagesMessageJson = gson.toJson(imageMessage);
 
                 resp.setContentType("application/json");
@@ -34,8 +34,7 @@ public class GetSavedImages extends HttpServlet {
 
             } catch (Exception e) {
                 e.printStackTrace();
-           //     resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                  resp.setStatus(HttpServletResponse.SC_OK);
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         });
     }

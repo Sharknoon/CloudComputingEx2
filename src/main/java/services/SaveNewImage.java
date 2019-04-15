@@ -28,23 +28,13 @@ public class SaveNewImage extends HttpServlet {
 
             Part imageData = req.getPart("imageData");
             InputStream imageContent = imageData.getInputStream();
+
+            DB db = DBs.getDB(DBs.DBInstance.GOOGLE_CLOUD_PLATFORM);
+            db.storeObject(imageCaption, imageDesc, imageContent);
+            resp.setStatus(HttpServletResponse.SC_OK);
         } catch (ServletException e) {
             e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
-  /*      BufferedReader reader = req.getReader();
-        Gson gson = new Gson();
-
-        SaveNewImageMessage newImageMessage = gson.fromJson(reader, SaveNewImageMessage.class);
-        Image toStoreImage = new Image();
-        toStoreImage.description = newImageMessage.getImageDesc();
-        toStoreImage.caption = newImageMessage.getImageCaption();
-        toStoreImage.base64 = newImageMessage.getImageData();
-
-        DB db = DBs.getMongoDB();
-        db.storeImage(toStoreImage); */
-
-        resp.setStatus(HttpServletResponse.SC_OK);
     }
 }

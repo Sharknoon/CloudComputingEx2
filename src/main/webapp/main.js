@@ -30,15 +30,6 @@ function showSavedImages(images) {
 
     const overviewContainer = document.getElementById("overviewContainer");
 
-    /**   var test = {
-        "caption": "caption",
-        "description" : "Das ist eine Beschreibung"
-    };
-
-     for(let i=0; i < 10; i++){
-        images.push(test);
-    } */
-
     for (let i = 0; i < images.length; i++) {
 
         const imageContainer = document.createElement("div");
@@ -50,7 +41,7 @@ function showSavedImages(images) {
         imageContainer.appendChild(imageCaption);
 
         const imageTag = new Image();
-        imageTag.src = images[i].base64;
+        imageTag.src = images[i].link;
         imageContainer.appendChild(imageTag);
 
         const imageDesc = document.createElement("span");
@@ -65,15 +56,8 @@ function uploadNewImage() {
         return;
     }
 
-    //   getBase64(filelist[0]).then(function (data) {
     const imageCaption = document.getElementById("caption").value;
     const imageDesc = document.getElementById("description").value;
-
- /*   let requestParameters = {
-        "imageCaption": imageCaption,
-        "imageDesc": imageDesc,
-        "imageData": data
-    }; */
 
     const formData = new FormData();
     formData.append('imageData', filelist[0]);
@@ -82,9 +66,6 @@ function uploadNewImage() {
 
     let requestBody = {
         method: "POST",
-        /*        headers: {
-                    "Content-Type": "application/json",
-                }, */
         body: formData
     };
 
@@ -95,7 +76,6 @@ function uploadNewImage() {
         .then(function (myJson) {
             console.log(JSON.stringify(myJson));
         });
-    // });
 }
 
 function getBase64(file) {

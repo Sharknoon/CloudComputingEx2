@@ -4,11 +4,11 @@ import db.Image;
 
 import java.util.List;
 
-public class GetSaveImagesMessage {
+public class GetSavedImagesMessage {
 
     private final List<Image> images;
 
-    public GetSaveImagesMessage(List<Image> images) {
+    public GetSavedImagesMessage(List<Image> images) {
         this.images = images;
     }
 }
