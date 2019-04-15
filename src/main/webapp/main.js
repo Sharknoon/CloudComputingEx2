@@ -17,29 +17,29 @@ function loadSaveImages() {
     fetch('getSavedImages')
         .then(async function (response) {
             const responseJson = await response.json();
-           showSavedImages(responseJson.images);
+            showSavedImages(responseJson.images);
         })
         .then(function (myJson) {
             console.log(JSON.stringify(myJson));
         });
 
- showSavedImages([]);
+    showSavedImages([]);
 }
 
 function showSavedImages(images) {
 
     const overviewContainer = document.getElementById("overviewContainer");
 
- /**   var test = {
+    /**   var test = {
         "caption": "caption",
         "description" : "Das ist eine Beschreibung"
     };
 
-    for(let i=0; i < 10; i++){
+     for(let i=0; i < 10; i++){
         images.push(test);
     } */
 
-    for(let i=0; i < images.length; i++){
+    for (let i = 0; i < images.length; i++) {
 
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("imageContainer");
@@ -65,32 +65,37 @@ function uploadNewImage() {
         return;
     }
 
-    getBase64(filelist[0]).then(function (data) {
-        const imageCaption = document.getElementById("caption").value;
-        const imageDesc = document.getElementById("description").value;
+    //   getBase64(filelist[0]).then(function (data) {
+    const imageCaption = document.getElementById("caption").value;
+    const imageDesc = document.getElementById("description").value;
 
-        let requestParameters = {
-            "imageCaption": imageCaption,
-            "imageDesc": imageDesc,
-            "imageData": data
-        };
+ /*   let requestParameters = {
+        "imageCaption": imageCaption,
+        "imageDesc": imageDesc,
+        "imageData": data
+    }; */
 
-        let requestBody = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestParameters)
-        };
+    const formData = new FormData();
+    formData.append('imageData', filelist[0]);
+    formData.append('imageCaption', imageCaption);
+    formData.append('imageDesc', imageDesc);
 
-        fetch('saveNewImage', requestBody)
-            .then(function (response) {
-              location.reload();
-            })
-            .then(function (myJson) {
-                console.log(JSON.stringify(myJson));
-            });
-    });
+    let requestBody = {
+        method: "POST",
+        /*        headers: {
+                    "Content-Type": "application/json",
+                }, */
+        body: formData
+    };
+
+    fetch('saveNewImage', requestBody)
+        .then(function (response) {
+            location.reload();
+        })
+        .then(function (myJson) {
+            console.log(JSON.stringify(myJson));
+        });
+    // });
 }
 
 function getBase64(file) {
