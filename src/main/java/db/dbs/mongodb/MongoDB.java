@@ -1,4 +1,4 @@
-package db.dbs;
+package db.dbs.mongodb;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
@@ -11,6 +11,7 @@ import db.DB;
 import db.Image;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -59,10 +60,7 @@ public final class MongoDB implements DB {
             );
             mongoDatabase = mongoClient.getDatabase(database);
             mongoCollection = mongoDatabase.getCollection(collectionName, Image.class);
-            //To definitely get no Nullpointer
-            if (mongoCollection != null) {
-                mongoInitialized = true;
-            }
+            mongoInitialized = true;
         } catch (Exception e) {
             log.log(Level.SEVERE, "Could not connect to Database", e);
         }
@@ -70,17 +68,16 @@ public final class MongoDB implements DB {
         initialized = mongoInitialized;
     }
 
-    /**
-     * Dont allow others to create Instances of this class
-     */
-    public MongoDB() {
-    }
-
     @Override
-    public void storeImage(Image image) {
+    public void storeObject(String caption, String description, InputStream data) {
         if (!initialized) {
             return;
         }
+        Image image = new Image(
+                "",
+                caption,
+                description
+        );
         collection.insertOne(image);
         log.log(Level.INFO, "Successfully stored image in Database " + image);
 

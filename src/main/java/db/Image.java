@@ -1,18 +1,27 @@
 package db;
 
-import org.bson.types.ObjectId;
-
 import java.util.Objects;
 
 /**
  * Just a simple bean holding a Image
  */
-public class Image {
+public final class Image {
 
-    public ObjectId id = new ObjectId();
-    public byte[] data = {};
-    public String caption = "";
-    public String description = "";
+    public final String link;
+    public final String caption;
+    public final String description;
+
+    Image() {
+        this.link = "";
+        this.caption = "";
+        this.description = "";
+    }
+
+    public Image(String link, String caption, String description) {
+        this.link = link;
+        this.caption = caption;
+        this.description = description;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -21,20 +30,19 @@ public class Image {
 
         Image image = (Image) o;
 
-        return Objects.equals(id, image.id);
+        return Objects.equals(link, image.link);
 
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return link.hashCode();
     }
 
     @Override
     public String toString() {
         return "Image (" +
-                "id=" + id +
-                ", size='" + data.length + '\'' +
+                "link='" + link + '\'' +
                 ", caption='" + caption + '\'' +
                 ", description='" + description + '\'' +
                 ')';

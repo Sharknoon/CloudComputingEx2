@@ -1,5 +1,6 @@
 package db;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -11,9 +12,11 @@ public interface DB {
     /**
      * Stores a image in the Database asynchronously
      *
-     * @param image The image to be stored
+     * @param caption     The caption of the image
+     * @param description The description of the image
+     * @param data        The image itself as Inputstream
      */
-    void storeImage(Image image);
+    void storeObject(String caption, String description, InputStream data);
 
     /**
      * Returns the images of the database
