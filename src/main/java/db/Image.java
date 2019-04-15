@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Image {
 
     public ObjectId id = new ObjectId();
-    public String base64 = "";
+    public byte[] data = {};
     public String caption = "";
     public String description = "";
 
@@ -34,7 +34,7 @@ public class Image {
     public String toString() {
         return "Image (" +
                 "id=" + id +
-                ", size='" + base64.length() + '\'' +
+                ", size='" + data.length + '\'' +
                 ", caption='" + caption + '\'' +
                 ", description='" + description + '\'' +
                 ')';

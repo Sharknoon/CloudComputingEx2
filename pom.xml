@@ -40,6 +40,11 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>

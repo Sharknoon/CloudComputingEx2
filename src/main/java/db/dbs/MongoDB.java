@@ -1,4 +1,4 @@
-package db;
+package db.dbs;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
@@ -7,6 +7,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
+import db.DB;
+import db.Image;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public final class MongoDB implements DB {
     /**
      * Dont allow others to create Instances of this class
      */
-    MongoDB() {
+    public MongoDB() {
     }
 
     @Override

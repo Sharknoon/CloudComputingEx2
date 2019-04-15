@@ -1,5 +1,8 @@
 package db;
 
+import db.dbs.CloudFirestore;
+import db.dbs.MongoDB;
+
 public final class DBs {
 
     /**
@@ -9,6 +12,10 @@ public final class DBs {
      */
     public static DB getMongoDB() {
         return new MongoDB();
+    }
+
+    public static DB getCloudFirestore(){
+        return new CloudFirestore();
     }
 
 }
